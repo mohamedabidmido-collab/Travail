@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 05 — Cancers Professionnels</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* SHARED ECOS PAGE STYLE */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #21262d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --card: #1c2128;
+  --c-cas: #58a6ff;
+  --c-interro: #3fb950;
+  --c-exam: #d2a8ff;
+  --c-para: #ffa657;
+  --c-diag: #f78166;
+  --c-cat: #79c0ff;
+  --c-pieges: #e3b341;
+  --c-grille: #56d364;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.back-link:hover { color: var(--text); }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; text-align: center; }
+.topbar-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  color: #fff;
+  font-weight: 600;
+}
+.page-header {
+  background: linear-gradient(135deg, #0d1117, #1c2128);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 32px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.station-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.page-header p { color: var(--muted); font-size: 0.95rem; max-width: 600px; }
+.main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+.section {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(255,255,255,0.03); }
+.section-icon { font-size: 1.4rem; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 1.05rem; font-weight: 600; }
+.section-title-text span { font-size: 12px; color: var(--muted); }
+.toggle-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.section-body {
+  padding: 0 24px 24px;
+  background: var(--card);
+  display: none;
+}
+.section-body.open { display: block; }
+.section-body p, .section-body li { font-size: 0.92rem; line-height: 1.75; color: #c9d1d9; }
+.section-body ul, .section-body ol { padding-left: 20px; }
+.section-body li { margin-bottom: 6px; }
+.section-body h4 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; }
+.highlight-box {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.hl-danger { background: rgba(247,129,102,0.1); border-left: 3px solid var(--c-diag); }
+.hl-info { background: rgba(88,166,255,0.1); border-left: 3px solid var(--c-cas); }
+.hl-success { background: rgba(63,185,80,0.1); border-left: 3px solid var(--c-interro); }
+.hl-warn { background: rgba(227,179,65,0.1); border-left: 3px solid var(--c-pieges); }
+.grille-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.grille-table th {
+  background: rgba(255,255,255,0.05);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.grille-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.pts { font-weight: 700; color: var(--c-grille); white-space: nowrap; }
+.total-row td { font-weight: 700; color: var(--text); background: rgba(86,211,100,0.08) !important; }
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.chip-red { background: rgba(247,129,102,0.15); color: var(--c-diag); }
+.chip-blue { background: rgba(88,166,255,0.15); color: var(--c-cas); }
+.chip-green { background: rgba(63,185,80,0.15); color: var(--c-interro); }
+.nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--c-cas); color: var(--c-cas); }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 05 / 8</span>
+  <span class="topbar-badge" style="background:#7c2d12">COURS 05</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 05</div>
+  <h1>🎗️ Cancers Professionnels</h1>
+  <p>Agents carcinogènes, cancers liés au travail et réparation médico-légale.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>M. Tarek, 58 ans, ancien ouvrier dans une usine de fabrication de matériaux d'isolation pendant 25 ans (retraité depuis 5 ans), 
+consulte pour dyspnée progressive, douleur thoracique et altération de l'état général. La radiographie thoracique montre un épanchement pleural droit.</p>
+<div class="highlight-box hl-danger">
+  <strong>Suspicion :</strong> Mésothéliome pleural malin lié à l'exposition à l'amiante. L'examinateur évalue votre capacité à établir le lien avec le travail et à orienter vers la réparation.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Enquête d'exposition professionnelle</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Anamnèse professionnelle détaillée</h4>
+<ul>
+  <li>Tous les postes occupés depuis le début de carrière</li>
+  <li>Durée et intensité d'exposition à chaque poste</li>
+  <li>Produits manipulés : amiante, benzène, amines aromatiques, chlorure de vinyle ?</li>
+  <li>Mesures de protection utilisées (masques, EPI)</li>
+  <li>Délai de latence (peut dépasser 30-40 ans pour l'amiante)</li>
+</ul>
+<h4>Facteurs de risque associés</h4>
+<ul>
+  <li>Tabagisme (synergie multiplicatrice avec amiante pour le cancer bronchique)</li>
+  <li>Alcool (cancers VADS)</li>
+  <li>Antécédents de rayonnements ionisants</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Examen Clinique</h2>
+            <span>Signes à rechercher</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Examen général</h4>
+<ul>
+  <li>AEG : perte de poids, asthénie, anorexie</li>
+  <li>Performance status (OMS)</li>
+</ul>
+<h4>Examen pleuro-pulmonaire</h4>
+<ul>
+  <li>Syndrome d'épanchement pleural (matité, abolition du murmure vésiculaire)</li>
+  <li>Douleur thoracique (pleurésie néoplasique = souvent douloureuse)</li>
+  <li>Hippocratisme digital</li>
+</ul>
+<h4>Examen général</h4>
+<ul>
+  <li>Adénopathies (sus-claviculaires, axillaires)</li>
+  <li>Signes métastatiques (hépatomégalie, signes neurologiques)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Examens Complémentaires</h2>
+            <span>Bilan diagnostique</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Imagerie</h4>
+<ul>
+  <li>Radiographie thoracique : épanchement pleural, plaques pleurales, masses</li>
+  <li>TDM thoracique : caractérisation de la plèvre, ganglions, extension</li>
+  <li>PET-scan : bilan d'extension</li>
+</ul>
+<h4>Biologie</h4>
+<ul>
+  <li>NFS, bilan hépatique, LDH</li>
+  <li>Mésothéline sérique (marqueur du mésothéliome)</li>
+</ul>
+<h4>Anatomopathologie — Indispensable</h4>
+<ul>
+  <li>Ponction-biopsie pleurale guidée (TDM)</li>
+  <li>Thoracoscopie avec biopsies multiples</li>
+  <li>Analyse des corps asbestosiques dans le tissu</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Principaux Cancers Professionnels</h2>
+            <span>Agents et organes cibles</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Cancers pleuro-pulmonaires</h4>
+<ul>
+  <li><strong>Amiante :</strong> Mésothéliome pleural (pathognomonique), cancer bronchique (synergie tabac)</li>
+  <li><strong>Silice :</strong> Cancer bronchique (CIRC groupe 1)</li>
+  <li><strong>Radon, arsenic, nickel, chrome VI :</strong> Cancer bronchique</li>
+</ul>
+<h4>Cancers urologiques</h4>
+<ul>
+  <li><strong>Amines aromatiques (benzidine, β-naphtylamine) :</strong> Cancer de la vessie</li>
+  <li>Industrie du caoutchouc, teintures, peintures</li>
+</ul>
+<h4>Hémopathies malignes</h4>
+<ul>
+  <li><strong>Benzène :</strong> Leucémies (LAM surtout), lymphomes non hodgkiniens</li>
+</ul>
+<h4>Cancers VADS</h4>
+<ul>
+  <li>Poussières de bois : cancer des sinus (ethmoïde ++)</li>
+  <li>Formaldéhyde, amiante, isopropanol</li>
+</ul>
+<div class="highlight-box hl-danger">
+  <strong>Long délai de latence :</strong> 20-40 ans pour l'amiante. Un cancer peut apparaître longtemps après la fin de l'exposition.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Prise en charge et réparation</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Prise en charge médicale</h4>
+<ul>
+  <li>Adresser en oncologie thoracique</li>
+  <li>Réunion de concertation pluridisciplinaire (RCP) oncologique</li>
+  <li>Traitement selon type histologique et stade (chirurgie, chimio, radio, immunothérapie)</li>
+  <li>Soins palliatifs si stade avancé</li>
+</ul>
+<h4>Réparation médico-légale</h4>
+<ul>
+  <li>Rechercher si le cancer figure dans un tableau de MP</li>
+  <li>Constituer un dossier de maladie professionnelle</li>
+  <li>CMI descriptif mentionnant exposition professionnelle</li>
+  <li>Déclaration à la CNAM (secteur privé) ou employeur (secteur public)</li>
+</ul>
+<h4>Prévention</h4>
+<ul>
+  <li>Substitution des agents cancérogènes (interdiction de l'amiante)</li>
+  <li>Réduction des expositions (valeurs limites)</li>
+  <li>Surveillance médicale renforcée des travailleurs exposés</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Oublier le délai de latence long (cancer peut survenir 40 ans après exposition)</li>
+    <li>❌ Confondre mésothéliome (amiante exclusif) et cancer bronchique (amiante + autres)</li>
+    <li>❌ Ne pas demander l'anamnèse professionnelle complète depuis la première embauche</li>
+    <li>❌ Ignorer la synergie multiplicatrice amiante + tabac pour le cancer bronchique</li>
+    <li>❌ Oublier que la déclaration en MP est possible même après la retraite</li>
+    <li>❌ Ne pas mentionner la prévention (interdiction de l'amiante en Tunisie)</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Identifier les agents cancérogènes et organes cibles</td><td class="pts">4/20</td></tr><tr><td>Anamnèse professionnelle complète (délai de latence, exposition)</td><td class="pts">4/20</td></tr><tr><td>Prescrire le bilan diagnostique adapté (imagerie, anapath)</td><td class="pts">3/20</td></tr><tr><td>Établir le lien emploi-maladie (tableau de MP)</td><td class="pts">3/20</td></tr><tr><td>Orienter vers la réparation (CMI, CNAM)</td><td class="pts">3/20</td></tr><tr><td>Citer les mesures de prévention collective</td><td class="pts">3/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours4.html">← Précédent</a>
+    <a class="nav-btn" href="cours6.html">Suivant →</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 02 — Maladies Professionnelles — Réparation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* SHARED ECOS PAGE STYLE */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #21262d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --card: #1c2128;
+  --c-cas: #58a6ff;
+  --c-interro: #3fb950;
+  --c-exam: #d2a8ff;
+  --c-para: #ffa657;
+  --c-diag: #f78166;
+  --c-cat: #79c0ff;
+  --c-pieges: #e3b341;
+  --c-grille: #56d364;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.back-link:hover { color: var(--text); }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; text-align: center; }
+.topbar-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  color: #fff;
+  font-weight: 600;
+}
+.page-header {
+  background: linear-gradient(135deg, #0d1117, #1c2128);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 32px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.station-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.page-header p { color: var(--muted); font-size: 0.95rem; max-width: 600px; }
+.main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+.section {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(255,255,255,0.03); }
+.section-icon { font-size: 1.4rem; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 1.05rem; font-weight: 600; }
+.section-title-text span { font-size: 12px; color: var(--muted); }
+.toggle-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.section-body {
+  padding: 0 24px 24px;
+  background: var(--card);
+  display: none;
+}
+.section-body.open { display: block; }
+.section-body p, .section-body li { font-size: 0.92rem; line-height: 1.75; color: #c9d1d9; }
+.section-body ul, .section-body ol { padding-left: 20px; }
+.section-body li { margin-bottom: 6px; }
+.section-body h4 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; }
+.highlight-box {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.hl-danger { background: rgba(247,129,102,0.1); border-left: 3px solid var(--c-diag); }
+.hl-info { background: rgba(88,166,255,0.1); border-left: 3px solid var(--c-cas); }
+.hl-success { background: rgba(63,185,80,0.1); border-left: 3px solid var(--c-interro); }
+.hl-warn { background: rgba(227,179,65,0.1); border-left: 3px solid var(--c-pieges); }
+.grille-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.grille-table th {
+  background: rgba(255,255,255,0.05);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.grille-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.pts { font-weight: 700; color: var(--c-grille); white-space: nowrap; }
+.total-row td { font-weight: 700; color: var(--text); background: rgba(86,211,100,0.08) !important; }
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.chip-red { background: rgba(247,129,102,0.15); color: var(--c-diag); }
+.chip-blue { background: rgba(88,166,255,0.15); color: var(--c-cas); }
+.chip-green { background: rgba(63,185,80,0.15); color: var(--c-interro); }
+.nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--c-cas); color: var(--c-cas); }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 02 / 8</span>
+  <span class="topbar-badge" style="background:#166534">COURS 02</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 02</div>
+  <h1>📋 Maladies Professionnelles — Réparation</h1>
+  <p>Reconnaissance, déclaration et indemnisation des maladies professionnelles.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>M. Ahmed, 50 ans, peintre en bâtiment depuis 20 ans, consulte pour une dyspnée progressive avec toux sèche. 
+Son médecin traitant suspecte une pathologie professionnelle liée à l'inhalation de solvants organiques.</p>
+<div class="highlight-box hl-info">
+  <strong>Contexte :</strong> L'examinateur évalue votre capacité à guider le patient dans la procédure de reconnaissance et de réparation d'une maladie professionnelle.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Questions clés</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Enquête professionnelle</h4>
+<ul>
+  <li>Poste occupé, durée et nature de l'exposition</li>
+  <li>Produits manipulés (solvants, peintures, aérosols ?)</li>
+  <li>Moyens de protection utilisés</li>
+  <li>Cas similaires chez les collègues</li>
+  <li>Secteur d'activité : privé ou public ? (détermine la loi applicable)</li>
+</ul>
+<h4>Chronologie</h4>
+<ul>
+  <li>Date des premiers symptômes</li>
+  <li>Délai de prise en charge (dernier jour d'exposition → premiers symptômes)</li>
+  <li>Agent étiologique inscrit dans un tableau de MP ?</li>
+</ul>
+<div class="highlight-box hl-info">
+  <strong>3 conditions obligatoires pour reconnaissance MPI :</strong>
+  <ol style="margin-top:8px; padding-left:18px">
+    <li>Agent étiologique inscrit dans un tableau</li>
+    <li>Délai de prise en charge respecté</li>
+    <li>Travail habituellement exposant à cet agent</li>
+  </ol>
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Documents Médicaux</h2>
+            <span>Pièces essentielles</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Certificat Médical Initial (CMI) — Pièce capitale +++</h4>
+<ul>
+  <li>Essentiellement <strong>descriptif</strong></li>
+  <li>Précise : siège, nature et gravité des lésions</li>
+  <li>Résultats des examens complémentaires</li>
+  <li>Durée probable des soins et de l'arrêt</li>
+  <li>Lien avec la maladie en cause</li>
+  <li>Doit être délivré même sans arrêt de travail</li>
+</ul>
+<h4>Autres documents</h4>
+<ul>
+  <li>Certificat médical de prolongation</li>
+  <li>Certificat de guérison / consolidation</li>
+  <li>Certificat médical de rechute</li>
+</ul>
+<div class="highlight-box hl-danger">
+  <strong>Consolidation ≠ Guérison :</strong> La consolidation est la date à laquelle les lésions sont stabilisées — aucun traitement ne peut les modifier. C'est à ce moment qu'est évaluée l'IPP.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Procédure de Déclaration</h2>
+            <span>Qui déclare, comment</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Obligation de déclaration</h4>
+<ul>
+  <li>Tout médecin qui en fait le diagnostic : médecin traitant, médecin du travail, spécialiste, hospitalier</li>
+  <li>Pour toute MPI <strong>et</strong> toute maladie à caractère professionnel (MCP)</li>
+</ul>
+<h4>Gestion selon secteur</h4>
+<ul>
+  <li><strong>Secteur privé :</strong> CNAM (prend en charge les soins, verse les indemnités)</li>
+  <li><strong>Secteur public :</strong> Employeur (maintien du salaire) + CNRPS (incapacité permanente)</li>
+</ul>
+<h4>87 Tableaux de MP en Tunisie</h4>
+<ul>
+  <li>Dernière modification : 20 novembre 2020</li>
+  <li>Révisée au moins tous les 3 ans</li>
+  <li>Classées par agents étiologiques (minéraux, hydrocarbures, pesticides, biologiques, etc.)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Diagnostic et Classification</h2>
+            <span>MPI vs MCP</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Maladie Professionnelle Indemnisable (MPI)</h4>
+<ul>
+  <li>Inscrite dans l'un des 87 tableaux</li>
+  <li>Bénéficie de la <strong>présomption légale d'origine</strong> : c'est à l'assureur de prouver le contraire</li>
+  <li>Réparation intégrale : soins gratuits + indemnités + rente IPP si séquelles</li>
+</ul>
+<h4>Maladie à Caractère Professionnel (MCP)</h4>
+<ul>
+  <li>D'origine professionnelle mais ne figure dans aucun tableau</li>
+  <li>Prise en charge comme maladie ordinaire (assurance maladie)</li>
+  <li>Possibilité de recours judiciaire</li>
+</ul>
+<div class="highlight-box hl-success">
+  <strong>Présomption d'imputabilité :</strong> Si toutes les conditions du tableau sont remplies → la maladie est présumée professionnelle. Le travailleur n'a pas à prouver le lien.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Prestations et Indemnisation</h2>
+            <span>Conduite à tenir</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Prestations temporaires en nature</h4>
+<ul>
+  <li>Secteur privé : CNAM prend en charge soins, honoraires, médicaments, hospitalisation</li>
+  <li>Secteur public : État couvre les frais (dans la limite des tarifs officiels)</li>
+</ul>
+<h4>Prestations temporaires en espèce</h4>
+<ul>
+  <li>Indemnité journalière = 2/3 du salaire (versée tous les 15 jours)</li>
+</ul>
+<h4>Prestations permanentes (IPP)</h4>
+<ul>
+  <li>Rente d'incapacité permanente partielle si séquelles à la date de consolidation</li>
+  <li>Calculée selon : taux d'IPP + salaire de référence</li>
+  <li>Révision possible dans les 5 ans après consolidation</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Confondre MPI (tableau) et MCP (hors tableau)</li>
+    <li>❌ Oublier les 3 conditions obligatoires de reconnaissance</li>
+    <li>❌ Ne pas mentionner la présomption d'imputabilité</li>
+    <li>❌ Dire que le CMI est un certificat thérapeutique → il est <strong>descriptif</strong></li>
+    <li>❌ Confondre guérison et consolidation</li>
+    <li>❌ Ignorer que les travailleurs indépendants ne sont pas couverts (article 9)</li>
+    <li>❌ Oublier que militaires et forces de sécurité sont exclus de la loi 95-56</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Définir MPI et MCP correctement</td><td class="pts">3/20</td></tr><tr><td>Citer les 3 conditions de reconnaissance d'une MPI</td><td class="pts">4/20</td></tr><tr><td>Expliquer la présomption d'imputabilité</td><td class="pts">3/20</td></tr><tr><td>Décrire le CMI (descriptif, contenu, délai)</td><td class="pts">3/20</td></tr><tr><td>Distinguer prestations secteur privé vs public</td><td class="pts">3/20</td></tr><tr><td>Citer les prestations permanentes (IPP)</td><td class="pts">4/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours1.html">← Précédent</a>
+    <a class="nav-btn" href="cours3.html">Suivant →</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 08 — Aptitude Médicale au Travail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* SHARED ECOS PAGE STYLE */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #21262d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --card: #1c2128;
+  --c-cas: #58a6ff;
+  --c-interro: #3fb950;
+  --c-exam: #d2a8ff;
+  --c-para: #ffa657;
+  --c-diag: #f78166;
+  --c-cat: #79c0ff;
+  --c-pieges: #e3b341;
+  --c-grille: #56d364;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.back-link:hover { color: var(--text); }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; text-align: center; }
+.topbar-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  color: #fff;
+  font-weight: 600;
+}
+.page-header {
+  background: linear-gradient(135deg, #0d1117, #1c2128);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 32px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.station-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.page-header p { color: var(--muted); font-size: 0.95rem; max-width: 600px; }
+.main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+.section {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(255,255,255,0.03); }
+.section-icon { font-size: 1.4rem; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 1.05rem; font-weight: 600; }
+.section-title-text span { font-size: 12px; color: var(--muted); }
+.toggle-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.section-body {
+  padding: 0 24px 24px;
+  background: var(--card);
+  display: none;
+}
+.section-body.open { display: block; }
+.section-body p, .section-body li { font-size: 0.92rem; line-height: 1.75; color: #c9d1d9; }
+.section-body ul, .section-body ol { padding-left: 20px; }
+.section-body li { margin-bottom: 6px; }
+.section-body h4 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; }
+.highlight-box {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.hl-danger { background: rgba(247,129,102,0.1); border-left: 3px solid var(--c-diag); }
+.hl-info { background: rgba(88,166,255,0.1); border-left: 3px solid var(--c-cas); }
+.hl-success { background: rgba(63,185,80,0.1); border-left: 3px solid var(--c-interro); }
+.hl-warn { background: rgba(227,179,65,0.1); border-left: 3px solid var(--c-pieges); }
+.grille-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.grille-table th {
+  background: rgba(255,255,255,0.05);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.grille-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.pts { font-weight: 700; color: var(--c-grille); white-space: nowrap; }
+.total-row td { font-weight: 700; color: var(--text); background: rgba(86,211,100,0.08) !important; }
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.chip-red { background: rgba(247,129,102,0.15); color: var(--c-diag); }
+.chip-blue { background: rgba(88,166,255,0.15); color: var(--c-cas); }
+.chip-green { background: rgba(63,185,80,0.15); color: var(--c-interro); }
+.nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--c-cas); color: var(--c-cas); }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 08 / 8</span>
+  <span class="topbar-badge" style="background:#713f12">COURS 08</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 08</div>
+  <h1>✅ Aptitude Médicale au Travail</h1>
+  <p>Concept d'aptitude, décisions et rôles des médecins.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>M. Nizar, 45 ans, chauffeur de camion, consulte le médecin du travail après avoir été traité pour un premier épisode d'épilepsie 
+(crise généralisée). Son traitement est en cours (antiépileptique). Son employeur souhaite une décision d'aptitude à son poste.</p>
+<div class="highlight-box hl-info">
+  <strong>Contexte :</strong> L'examinateur évalue votre compréhension du concept d'aptitude médicale au travail et la décision à prendre pour ce cas clinique.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Évaluation médicale et professionnelle</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Évaluation médicale de l'épilepsie</h4>
+<ul>
+  <li>Type de crise (généralisée, partielle, absences)</li>
+  <li>Fréquence des crises, dernière crise, facteurs déclenchants</li>
+  <li>Traitement en cours et observance</li>
+  <li>Période de stabilisation (durée sans crise)</li>
+  <li>Avis du neurologue</li>
+</ul>
+<h4>Évaluation professionnelle</h4>
+<ul>
+  <li>Description précise du poste : conduite de véhicules lourds = <strong>poste à risque élevé</strong></li>
+  <li>Travail en hauteur, machines dangereuses, conduite d'engins ?</li>
+  <li>Possibilités de reclassement dans l'entreprise</li>
+  <li>Ancienneté, qualification, niveau d'éducation</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Évaluation Clinique et Fonctionnelle</h2>
+            <span>Examen adapté au poste</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Examen neurologique</h4>
+<ul>
+  <li>Signes focaux, déficit cognitif</li>
+  <li>État mental et vigilance</li>
+</ul>
+<h4>Examens complémentaires</h4>
+<ul>
+  <li>EEG (tracé de fond, anomalies épileptiformes)</li>
+  <li>IRM cérébrale (étiologie, lésion structurelle ?)</li>
+  <li>Dosage du taux plasmatique du médicament (observance ?)</li>
+</ul>
+<h4>Analyse du poste de travail</h4>
+<ul>
+  <li>Visiter le poste ou obtenir une description précise</li>
+  <li>Identifier les risques spécifiques (conduite, hauteur, machines)</li>
+  <li>Proposer des aménagements possibles</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Concept d'Aptitude Médicale</h2>
+            <span>Notions fondamentales</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Définitions clés</h4>
+<ul>
+  <li><strong>Aptitude :</strong> Adéquation entre l'état de santé du travailleur et les exigences du poste</li>
+  <li><strong>Inaptitude :</strong> Impossibilité médicale d'occuper le poste (temporaire ou définitive)</li>
+</ul>
+<h4>Types de décisions</h4>
+<ul>
+  <li><span class="chip chip-green">Apte</span> Peut occuper le poste sans restriction</li>
+  <li><span class="chip chip-blue">Apte avec restrictions</span> Peut occuper le poste avec aménagements (horaires, port de charge, etc.)</li>
+  <li><span class="chip chip-red">Inapte</span> Ne peut pas occuper ce poste (temporaire ou définitif)</li>
+</ul>
+<h4>Rôle de chaque médecin</h4>
+<ul>
+  <li><strong>Médecin du travail :</strong> Seul habilité à délivrer l'avis d'aptitude au poste</li>
+  <li><strong>Médecin traitant :</strong> Fournit les informations médicales nécessaires (avec accord du patient)</li>
+  <li><strong>Médecin spécialiste :</strong> Évalue la pathologie et donne un avis médical (pas d'aptitude)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Décision d'Aptitude</h2>
+            <span>Pour ce cas clinique</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Conclusion pour M. Nizar</h4>
+<div class="highlight-box hl-danger">
+  <strong>Inaptitude définitive au poste de chauffeur de camion</strong> — conduite de véhicules lourds = poste à risque majeur en cas de crise épileptique.
+</div>
+<h4>Justification</h4>
+<ul>
+  <li>Épilepsie = risque de perte brutale de conscience</li>
+  <li>Conduite de PL = danger pour le travailleur ET les tiers</li>
+  <li>Même si traitement efficace : risque résiduel non nul</li>
+</ul>
+<h4>Postes contre-indiqués en cas d'épilepsie</h4>
+<ul>
+  <li>Conduite de véhicules (PL, bus, engins de chantier)</li>
+  <li>Travail en hauteur sans filet de sécurité</li>
+  <li>Proximité de machines non protégées</li>
+  <li>Plongée sous-marine, pilotage d'avion</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Après la décision d'inaptitude</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Obligations de l'employeur après inaptitude</h4>
+<ul>
+  <li>Rechercher un poste de reclassement dans l'entreprise</li>
+  <li>Si reclassement impossible → procédure de licenciement pour inaptitude</li>
+  <li>Indemnité compensatrice de préavis + indemnité de licenciement</li>
+</ul>
+<h4>Options pour le travailleur</h4>
+<ul>
+  <li>Reclassement professionnel (si poste compatible trouvé)</li>
+  <li>Formation professionnelle adaptée</li>
+  <li>Demande d'invalidité si incapacité totale</li>
+  <li>Retraite anticipée si âge et conditions remplies</li>
+</ul>
+<h4>Rôle du médecin du travail dans le suivi</h4>
+<ul>
+  <li>Accompagner le travailleur dans les démarches</li>
+  <li>Formuler des propositions de reclassement motivées</li>
+  <li>Coordonner avec le médecin traitant et le spécialiste</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Déclarer l'aptitude sans avoir analysé précisément les exigences du poste</li>
+    <li>❌ Confondre le rôle du médecin traitant (soins) et du médecin du travail (aptitude)</li>
+    <li>❌ Oublier de proposer un reclassement avant de conclure à l'inaptitude définitive</li>
+    <li>❌ Ignorer que l'aptitude avec restrictions est possible (ne pas aller directement à l'inaptitude)</li>
+    <li>❌ Ne pas mentionner les obligations de l'employeur après inaptitude</li>
+    <li>❌ Oublier que seul le médecin du travail peut émettre un avis d'aptitude au poste</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Définir le concept d'aptitude médicale au travail</td><td class="pts">2/20</td></tr><tr><td>Analyser le poste de travail et identifier les risques spécifiques</td><td class="pts">4/20</td></tr><tr><td>Évaluation médicale complète (neurologique, EEG, IRM, traitement)</td><td class="pts">3/20</td></tr><tr><td>Décision d'aptitude motivée et adaptée (apte/restrictions/inapte)</td><td class="pts">4/20</td></tr><tr><td>Citer les rôles respectifs médecin du travail / médecin traitant</td><td class="pts">3/20</td></tr><tr><td>Proposer les suites (reclassement, droits de l'employeur)</td><td class="pts">4/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours7.html">← Précédent</a>
+    <a class="nav-btn" href="index.html">🏠 Accueil</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECOS — Médecine du Travail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #21262d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --accent6: #79c0ff;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --card: #1c2128;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(88,166,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e6edf3 0%, #8b949e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 580px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    border-radius: 12px 12px 0 0;
+  }
+  .card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card-icon { font-size: 2rem; margin-bottom: 16px; }
+  .card-num {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .card-link {
+    color: var(--card-accent, var(--accent));
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .difficulty { font-size: 11px; color: var(--muted); }
+
+  /* Separator between batches */
+  .batch-sep {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 8px 0 24px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+  }
+  .batch-sep::before, .batch-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .batch-pill {
+    padding: 3px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .legend {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🏥 Entraînement ECOS</div>
+  <h1>Médecine du Travail<br>Stations ECOS Interactives</h1>
+  <p>Simulez de véritables stations d'examen clinique objectif structuré. Raisonnez comme un clinicien, comprenez les attentes de l'examinateur.</p>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">13</div>
+      <div class="stat-label">Stations ECOS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">13</div>
+      <div class="stat-label">Grilles d'évaluation</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">20</div>
+      <div class="stat-label">Points / Grille</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="section-title">Toutes les stations</div>
+
+  <div class="batch-sep"><span class="batch-pill">📦 Partie 1 — Fondamentaux &amp; Pathologies classiques</span></div>
+
+  <div class="grid">
+    <a class="card" href="cours1.html" style="--card-accent:#58a6ff">
+      <div class="card-icon">🏭</div>
+      <div class="card-num">Station 01</div>
+      <h3>Introduction à la Médecine du Travail</h3>
+      <p>Organisation, objectifs et cadre réglementaire de la médecine du travail en Tunisie.</p>
+      <div class="card-tags">
+        <span class="tag">Réglementation</span>
+        <span class="tag">Prévention</span>
+        <span class="tag">CNAM</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐ Fondamental</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours2.html" style="--card-accent:#3fb950">
+      <div class="card-icon">📋</div>
+      <div class="card-num">Station 02</div>
+      <h3>Maladies Professionnelles — Réparation</h3>
+      <p>Définition, reconnaissance, déclaration et indemnisation des maladies professionnelles.</p>
+      <div class="card-tags">
+        <span class="tag">Médico-légal</span>
+        <span class="tag">Tableaux MP</span>
+        <span class="tag">CNAM</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours3.html" style="--card-accent:#f78166">
+      <div class="card-icon">⚡</div>
+      <div class="card-num">Station 03</div>
+      <h3>Accidents du Travail</h3>
+      <p>Gestion, déclaration du CMI, aspects médico-légaux et réparation des accidents du travail.</p>
+      <div class="card-tags">
+        <span class="tag">CMI</span>
+        <span class="tag">AT</span>
+        <span class="tag">Urgence</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours4.html" style="--card-accent:#d2a8ff">
+      <div class="card-icon">🫁</div>
+      <div class="card-num">Station 04</div>
+      <h3>Asthme Professionnel</h3>
+      <p>Diagnostic, bilan étiologique, démarche diagnostique et prise en charge de l'asthme professionnel.</p>
+      <div class="card-tags">
+        <span class="tag">Spirométrie</span>
+        <span class="tag">DEP</span>
+        <span class="tag">Allergènes</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours5.html" style="--card-accent:#ffa657">
+      <div class="card-icon">🎗️</div>
+      <div class="card-num">Station 05</div>
+      <h3>Cancers Professionnels</h3>
+      <p>Agents carcinogènes, cancers pleuro-pulmonaires, urologiques, hémopathies et réparation.</p>
+      <div class="card-tags">
+        <span class="tag">Amiante</span>
+        <span class="tag">Mésothéliome</span>
+        <span class="tag">Prévention</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours6.html" style="--card-accent:#79c0ff">
+      <div class="card-icon">🩸</div>
+      <div class="card-num">Station 06</div>
+      <h3>Accidents d'Exposition au Sang (AES)</h3>
+      <p>Définition, conduite à tenir immédiate, prophylaxie VIH/VHB/VHC et déclaration.</p>
+      <div class="card-tags">
+        <span class="tag">VIH</span>
+        <span class="tag">VHB</span>
+        <span class="tag">TPE</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours7.html" style="--card-accent:#56d364">
+      <div class="card-icon">💨</div>
+      <div class="card-num">Station 07</div>
+      <h3>Pneumoconioses Professionnelles</h3>
+      <p>Silicose, asbestose, anthracose — démarche diagnostique, imagerie et prévention.</p>
+      <div class="card-tags">
+        <span class="tag">Silicose</span>
+        <span class="tag">Asbestose</span>
+        <span class="tag">Fibrose</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours8.html" style="--card-accent:#e3b341">
+      <div class="card-icon">✅</div>
+      <div class="card-num">Station 08</div>
+      <h3>Aptitude Médicale au Travail</h3>
+      <p>Concept d'aptitude, rôle du médecin du travail et du médecin traitant, décisions d'aptitude.</p>
+      <div class="card-tags">
+        <span class="tag">Aptitude</span>
+        <span class="tag">Inaptitude</span>
+        <span class="tag">Reclassement</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="batch-sep"><span class="batch-pill">📦 Partie 2 — Pathologies spécialisées &amp; Risques émergents</span></div>
+
+  <div class="grid">
+    <a class="card" href="cours9.html" style="--card-accent:#34d399">
+      <div class="card-icon">🧠</div>
+      <div class="card-num">Station 09</div>
+      <h3>Épilepsie et Aptitude au Travail</h3>
+      <p>Évaluation individualisée de l'aptitude chez un travailleur épileptique — critères ILAE, métiers réglementés.</p>
+      <div class="card-tags">
+        <span class="tag">Critère ILAE</span>
+        <span class="tag">Aptitude</span>
+        <span class="tag">INRS</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours10.html" style="--card-accent:#f87171">
+      <div class="card-icon">☁️</div>
+      <div class="card-num">Station 10</div>
+      <h3>Pneumopathies aux Irritants Respiratoires</h3>
+      <p>Gaz irritants, OAP lésionnel au chlore, RADS, BPCO professionnelle — CAT urgente et prévention.</p>
+      <div class="card-tags">
+        <span class="tag">OAP lésionnel</span>
+        <span class="tag">RADS</span>
+        <span class="tag">Cl₂</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours11.html" style="--card-accent:#a78bfa">
+      <div class="card-icon">🖐️</div>
+      <div class="card-num">Station 11</div>
+      <h3>Dermatite de Contact Professionnelle</h3>
+      <p>Démarche en 7 étapes, eczéma de contact allergique vs irritatif, patch-tests et réparation.</p>
+      <div class="card-tags">
+        <span class="tag">Patch-tests</span>
+        <span class="tag">PPD</span>
+        <span class="tag">ECA vs DI</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours12.html" style="--card-accent:#fb923c">
+      <div class="card-icon">🌡️</div>
+      <div class="card-num">Station 12</div>
+      <h3>Ambiances Thermiques au Travail</h3>
+      <p>Coup de chaleur vs épuisement thermique, hypothermie, cataracte des verriers — urgences et tableaux MP.</p>
+      <div class="card-tags">
+        <span class="tag">Coup de chaleur</span>
+        <span class="tag">Tableau 77</span>
+        <span class="tag">Tableau 83</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours13.html" style="--card-accent:#38bdf8">
+      <div class="card-icon">🧘</div>
+      <div class="card-num">Station 13</div>
+      <h3>Risques Psychosociaux &amp; Burnout</h3>
+      <p>Burnout, stress, harcèlement, souffrance éthique — modèles Karasek/Siegrist, MBI et prévention collective.</p>
+      <div class="card-tags">
+        <span class="tag">Burnout</span>
+        <span class="tag">Karasek</span>
+        <span class="tag">MBI</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">Légende des sections</div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div> Situation clinique</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div> Interrogatoire</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d2a8ff"></div> Examen clinique</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffa657"></div> Examens complémentaires</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f78166"></div> Diagnostic</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#79c0ff"></div> Conduite à tenir</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e3b341"></div> Pièges ECOS</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#56d364"></div> Grille d'évaluation</div>
+  </div>
+</main>
+
+<footer>
+  Outil de préparation ECOS — Médecine du Travail &nbsp;|&nbsp; Basé sur les cours de Jihed Chiha, Yecine Dammak &amp; Mohamed Abid
+</footer>
+</body>
+</html>

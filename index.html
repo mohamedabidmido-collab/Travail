@@ -79,9 +79,7 @@
     gap: 32px;
     flex-wrap: wrap;
   }
-  .stat {
-    text-align: center;
-  }
+  .stat { text-align: center; }
   .stat-num {
     font-family: 'DM Serif Display', serif;
     font-size: 2rem;
@@ -144,10 +142,7 @@
     transform: translateY(-3px);
     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
   }
-  .card-icon {
-    font-size: 2rem;
-    margin-bottom: 16px;
-  }
+  .card-icon { font-size: 2rem; margin-bottom: 16px; }
   .card-num {
     font-size: 11px;
     text-transform: uppercase;
@@ -195,10 +190,33 @@
     align-items: center;
     gap: 6px;
   }
-  .difficulty {
+  .difficulty { font-size: 11px; color: var(--muted); }
+
+  /* Separator between batches */
+  .batch-sep {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 8px 0 24px;
     font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: var(--muted);
   }
+  .batch-sep::before, .batch-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .batch-pill {
+    padding: 3px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
   .legend {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -237,11 +255,11 @@
   <p>Simulez de véritables stations d'examen clinique objectif structuré. Raisonnez comme un clinicien, comprenez les attentes de l'examinateur.</p>
   <div class="stats-row">
     <div class="stat">
-      <div class="stat-num">8</div>
+      <div class="stat-num">13</div>
       <div class="stat-label">Stations ECOS</div>
     </div>
     <div class="stat">
-      <div class="stat-num">8</div>
+      <div class="stat-num">13</div>
       <div class="stat-label">Grilles d'évaluation</div>
     </div>
     <div class="stat">
@@ -253,8 +271,10 @@
 
 <main>
   <div class="section-title">Toutes les stations</div>
-  <div class="grid">
 
+  <div class="batch-sep"><span class="batch-pill">📦 Partie 1 — Fondamentaux &amp; Pathologies classiques</span></div>
+
+  <div class="grid">
     <a class="card" href="cours1.html" style="--card-accent:#58a6ff">
       <div class="card-icon">🏭</div>
       <div class="card-num">Station 01</div>
@@ -382,7 +402,90 @@
         <span class="difficulty">⭐⭐ Important</span>
       </div>
     </a>
+  </div>
 
+  <div class="batch-sep"><span class="batch-pill">📦 Partie 2 — Pathologies spécialisées &amp; Risques émergents</span></div>
+
+  <div class="grid">
+    <a class="card" href="cours9.html" style="--card-accent:#34d399">
+      <div class="card-icon">🧠</div>
+      <div class="card-num">Station 09</div>
+      <h3>Épilepsie et Aptitude au Travail</h3>
+      <p>Évaluation individualisée de l'aptitude chez un travailleur épileptique — critères ILAE, métiers réglementés.</p>
+      <div class="card-tags">
+        <span class="tag">Critère ILAE</span>
+        <span class="tag">Aptitude</span>
+        <span class="tag">INRS</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours10.html" style="--card-accent:#f87171">
+      <div class="card-icon">☁️</div>
+      <div class="card-num">Station 10</div>
+      <h3>Pneumopathies aux Irritants Respiratoires</h3>
+      <p>Gaz irritants, OAP lésionnel au chlore, RADS, BPCO professionnelle — CAT urgente et prévention.</p>
+      <div class="card-tags">
+        <span class="tag">OAP lésionnel</span>
+        <span class="tag">RADS</span>
+        <span class="tag">Cl₂</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours11.html" style="--card-accent:#a78bfa">
+      <div class="card-icon">🖐️</div>
+      <div class="card-num">Station 11</div>
+      <h3>Dermatite de Contact Professionnelle</h3>
+      <p>Démarche en 7 étapes, eczéma de contact allergique vs irritatif, patch-tests et réparation.</p>
+      <div class="card-tags">
+        <span class="tag">Patch-tests</span>
+        <span class="tag">PPD</span>
+        <span class="tag">ECA vs DI</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours12.html" style="--card-accent:#fb923c">
+      <div class="card-icon">🌡️</div>
+      <div class="card-num">Station 12</div>
+      <h3>Ambiances Thermiques au Travail</h3>
+      <p>Coup de chaleur vs épuisement thermique, hypothermie, cataracte des verriers — urgences et tableaux MP.</p>
+      <div class="card-tags">
+        <span class="tag">Coup de chaleur</span>
+        <span class="tag">Tableau 77</span>
+        <span class="tag">Tableau 83</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐⭐ Prioritaire</span>
+      </div>
+    </a>
+
+    <a class="card" href="cours13.html" style="--card-accent:#38bdf8">
+      <div class="card-icon">🧘</div>
+      <div class="card-num">Station 13</div>
+      <h3>Risques Psychosociaux &amp; Burnout</h3>
+      <p>Burnout, stress, harcèlement, souffrance éthique — modèles Karasek/Siegrist, MBI et prévention collective.</p>
+      <div class="card-tags">
+        <span class="tag">Burnout</span>
+        <span class="tag">Karasek</span>
+        <span class="tag">MBI</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-link">Démarrer →</span>
+        <span class="difficulty">⭐⭐ Important</span>
+      </div>
+    </a>
   </div>
 
   <div class="section-title">Légende des sections</div>
@@ -399,8 +502,7 @@
 </main>
 
 <footer>
-  Outil de préparation ECOS — Médecine du Travail &nbsp;|&nbsp; Basé sur les cours de Jihed Chiha, Yecine Dammak & Mohamed Abid
+  Outil de préparation ECOS — Médecine du Travail &nbsp;|&nbsp; Basé sur les cours de Jihed Chiha, Yecine Dammak &amp; Mohamed Abid
 </footer>
-
 </body>
 </html>

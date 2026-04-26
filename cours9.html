@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 09 — Épilepsie et Aptitude au Travail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+.back-link {
+  color: #58a6ff; text-decoration: none; font-size: 13px;
+}
+.back-link:hover { text-decoration: underline; }
+.topbar-title { font-size: 13px; color: #8b949e; }
+.topbar-badge {
+  font-size: 11px; font-weight: 600; color: #fff;
+  padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* PAGE HEADER */
+.page-header {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #21262d;
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+.station-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: #58a6ff; text-transform: uppercase; margin-bottom: 8px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  color: #f0f6fc;
+  margin-bottom: 10px;
+}
+.page-header p {
+  color: #8b949e; font-size: 14px; max-width: 600px; margin: 0 auto;
+}
+
+/* MAIN */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+/* SECTION */
+.section {
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #161b22;
+}
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(88,166,255,0.04); }
+.section-icon { font-size: 22px; flex-shrink: 0; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+.section-title-text span { font-size: 12px; color: #8b949e; }
+.toggle-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #8b949e; font-size: 18px; line-height: 1;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.toggle-btn:hover { background: #21262d; color: #c9d1d9; }
+
+.section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding: 0 20px;
+}
+.section-body.open {
+  max-height: 3000px;
+  padding: 20px;
+  border-top: 1px solid #21262d;
+}
+
+/* CONTENT */
+.section-body h4 {
+  font-size: 13px; font-weight: 600; color: #58a6ff;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 18px 0 8px;
+}
+.section-body h4:first-child { margin-top: 0; }
+.section-body ul, .section-body ol {
+  padding-left: 20px; line-height: 1.8;
+}
+.section-body li { font-size: 14px; color: #c9d1d9; margin-bottom: 3px; }
+.section-body li > ul { margin-top: 4px; }
+.section-body p { font-size: 14px; line-height: 1.7; color: #c9d1d9; }
+.section-body strong { color: #f0f6fc; }
+
+/* HIGHLIGHT BOXES */
+.highlight-box {
+  border-radius: 8px; padding: 14px 16px;
+  margin: 12px 0; font-size: 14px;
+  border-left: 3px solid;
+}
+.hl-info  { background: rgba(88,166,255,0.08); border-color: #58a6ff; color: #c9d1d9; }
+.hl-warn  { background: rgba(227,179,65,0.08); border-color: #e3b341; color: #c9d1d9; }
+.hl-danger{ background: rgba(248,81,73,0.10); border-color: #f85149; color: #c9d1d9; }
+.hl-success{background: rgba(63,185,80,0.08); border-color: #3fb950; color: #c9d1d9; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; border-radius: 20px;
+  padding: 2px 10px; font-size: 12px; font-weight: 600;
+}
+.chip-green  { background: rgba(63,185,80,0.15);  color: #3fb950; }
+.chip-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.chip-red    { background: rgba(248,81,73,0.15);  color: #f85149; }
+.chip-yellow { background: rgba(227,179,65,0.15); color: #e3b341; }
+
+/* GRILLE TABLE */
+.grille-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.grille-table th {
+  background: #0d1117; color: #8b949e;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid #21262d;
+}
+.grille-table td { padding: 10px 14px; border-bottom: 1px solid #21262d; }
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.grille-table .pts {
+  text-align: right; font-weight: 600; color: #3fb950; white-space: nowrap;
+}
+.grille-table .total-row td { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+.grille-table .total-row .pts { color: #58a6ff; font-size: 15px; }
+
+/* NAV */
+.nav-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid #21262d;
+}
+.nav-btn {
+  padding: 10px 20px; border-radius: 8px;
+  border: 1px solid #30363d;
+  background: #161b22; color: #c9d1d9;
+  text-decoration: none; font-size: 14px;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: #21262d; border-color: #58a6ff; color: #58a6ff; }
+
+@media (max-width: 600px) {
+  .topbar { padding: 10px 14px; }
+  .main { padding: 20px 12px 60px; }
+  .section-body.open { padding: 14px; }
+  .nav-footer { flex-direction: column; gap: 12px; }
+  .nav-btn { width: 100%; text-align: center; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 09 / 13</span>
+  <span class="topbar-badge" style="background:#065f46">COURS 09</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 09</div>
+  <h1>🧠 Épilepsie et Aptitude au Travail</h1>
+  <p>Évaluation de l'aptitude chez un travailleur épileptique — démarche individualisée.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>M. Karim, 25 ans, épileptique connu depuis l'âge de 12 ans (épilepsie idiopathique), traité par valproate de sodium. 
+Dernière crise : il y a 14 mois. EEG récent : normal. Il se présente pour une visite d'embauche pour un poste d'<strong>agent de production sur une ligne automatisée avec machines dangereuses</strong>.</p>
+<div class="highlight-box hl-info">
+  <strong>Contexte :</strong> L'examinateur évalue votre capacité à déterminer l'aptitude au poste de façon raisonnée et individualisée pour un travailleur épileptique.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Évaluation de l'épilepsie et du poste</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Caractéristiques de l'épilepsie (évaluation du risque)</h4>
+<ul>
+  <li>Type de crises : généralisées ? partielles ? avec ou sans rupture de contact ?</li>
+  <li>Présence de prodromes/aura permettant de se mettre en sécurité ?</li>
+  <li>Fréquence et horaire des crises (diurnes/nocturnes)</li>
+  <li><strong>Délai depuis la dernière crise (critère ILAE : ≥1 an = épilepsie contrôlée)</strong></li>
+  <li>Observance thérapeutique, effets secondaires</li>
+  <li>Facteurs déclenchants : privation de sommeil, lumières intermittentes, stress ?</li>
+</ul>
+<h4>Caractéristiques du poste</h4>
+<ul>
+  <li>Présence de machines dangereuses, risque de coincement, écrasement</li>
+  <li>Travail en hauteur, conduite d'engins</li>
+  <li>Travail posté ou de nuit (perturbation du sommeil)</li>
+  <li>Présence de stimulations lumineuses intermittentes (convoyeurs, écrans)</li>
+</ul>
+<h4>Impact socioprofessionnel</h4>
+<ul>
+  <li>Stigmatisation, le patient cache-t-il sa maladie ?</li>
+  <li>Comorbidités cognitives (présentes chez 25-40% des épileptiques)</li>
+  <li>Taux de chômage 2× plus élevé chez les épileptiques</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Évaluation Clinique</h2>
+            <span>Examen orienté aptitude</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Examen neurologique</h4>
+<ul>
+  <li>Déficits cognitifs (mémoire, concentration, attention)</li>
+  <li>Effets secondaires du traitement (somnolence, ataxie, tremblements)</li>
+  <li>État psychologique général</li>
+</ul>
+<h4>Examens complémentaires</h4>
+<ul>
+  <li>EEG récent (tracé de fond, activité épileptiforme intercritique)</li>
+  <li>IRM cérébrale (lésion structurelle ?)</li>
+  <li>Taux plasmatique de l'antiépileptique (observance)</li>
+</ul>
+<h4>Analyse du poste de travail</h4>
+<ul>
+  <li>Visite du poste ou description détaillée par l'employeur</li>
+  <li>Identification des zones dangereuses et des protections existantes</li>
+  <li>Possibilités d'aménagement ou de reclassement</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Critères de Décision</h2>
+            <span>Algorithme d'aptitude INRS 2024</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Épilepsie BIEN contrôlée (risque maîtrisé) → Aptitude avec précautions</h4>
+<ul>
+  <li>Pas de rupture de contact</li>
+  <li>Pas de gestes dangereux involontaires</li>
+  <li>Prodromes systématiques laissant le temps de se mettre en sécurité</li>
+  <li>Crises uniquement nocturnes</li>
+  <li><strong>Dernière crise &gt;12 mois (critère ILAE)</strong></li>
+</ul>
+<h4>Épilepsie MAL contrôlée (risque non maîtrisé) → Inaptitude</h4>
+<ul>
+  <li>Rupture de contact</li>
+  <li>Gestes dangereux involontaires</li>
+  <li>Pas de prodromes systématiques</li>
+  <li>Crises d'horaire variable</li>
+  <li>Délai sans crise &lt;12 mois</li>
+</ul>
+<h4>Métiers réglementés — inaccessibles même si épilepsie stabilisée</h4>
+<ul>
+  <li>Transports : SNCF postes de sécurité, aviation civile</li>
+  <li>Forces de sécurité avec port d'armes, pompiers professionnels, armée</li>
+  <li>Marine marchande, plongeurs professionnels, démineurs</li>
+  <li>Postes exposant aux rayonnements ionisants</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Décision d'Aptitude</h2>
+            <span>Application au cas clinique</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Analyse du cas de M. Karim</h4>
+<div class="highlight-box hl-warn">
+  <strong>Facteurs favorables :</strong>
+  <ul style="margin-top:8px">
+    <li>Épilepsie connue et traitée depuis longtemps</li>
+    <li>EEG normal récent</li>
+    <li>Dernière crise : 14 mois (≥12 mois → contrôlée selon ILAE)</li>
+  </ul>
+</div>
+<div class="highlight-box hl-danger">
+  <strong>Facteur défavorable :</strong>
+  <ul style="margin-top:8px">
+    <li>Poste avec machines dangereuses → risque majeur en cas de crise</li>
+  </ul>
+</div>
+<h4>Décision</h4>
+<ul>
+  <li><span class="chip chip-blue">Apte avec restrictions</span> si les machines sont suffisamment protégées (carter, arrêt d'urgence) ET pas de rupture de contact</li>
+  <li><span class="chip chip-red">Inapte</span> si machines non protégées / rupture de contact possible / crises &lt;12 mois</li>
+  <li>Décision <strong>au cas par cas</strong> — le médecin du travail doit trancher favorablement pour éviter l'exclusion sociale</li>
+</ul>
+<h4>3 types de situations cliniques (cas cliniques du cours)</h4>
+<ul>
+  <li>Poste sans danger + épilepsie stable → <span class="chip chip-green">Apte sans restriction</span></li>
+  <li>Poste avec risque modéré + épilepsie contrôlée → <span class="chip chip-blue">Apte avec aménagement</span></li>
+  <li>Poste à haut risque (conduite PL, hauteur) + crises &lt;1an → <span class="chip chip-red">Inapte</span></li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Après la décision</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Si aptitude accordée</h4>
+<ul>
+  <li>Éducation du travailleur et de l'employeur sur les conduites à tenir en cas de crise</li>
+  <li>Aménagement du poste : protections des machines, pas de travail en hauteur, pas de nuit</li>
+  <li>Suivi médical renforcé (médecin du travail + neurologue)</li>
+  <li>Réévaluation en cas de nouvelle crise</li>
+</ul>
+<h4>Si inaptitude</h4>
+<ul>
+  <li>Rechercher un poste de reclassement compatible avec l'épilepsie</li>
+  <li>Orientation vers la MDPH (handicap) si nécessaire</li>
+  <li>Soutien psychologique : lutter contre la stigmatisation</li>
+  <li>L'employeur doit chercher à reclasser avant de licencier</li>
+</ul>
+<h4>Rôle du médecin du travail</h4>
+<ul>
+  <li>Garantir la sécurité du travailleur ET de son entourage</li>
+  <li>Favoriser le maintien dans l'emploi (objectif prioritaire)</li>
+  <li>Lutter contre la discrimination et la stigmatisation</li>
+  <li>Coordonner avec le neurologue traitant</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Déclarer systématiquement inapte tout travailleur épileptique (discrimination !)</li>
+    <li>❌ Oublier le critère ILAE : ≥1 an sans crise = épilepsie contrôlée</li>
+    <li>❌ Ne pas analyser le poste de travail avant de décider</li>
+    <li>❌ Ignorer que la décision est toujours au cas par cas</li>
+    <li>❌ Confondre métiers réglementés (inaptitude absolue) et postes courants (décision nuancée)</li>
+    <li>❌ Oublier que 70% des épileptiques ont un emploi → l'emploi est un facteur d'intégration</li>
+    <li>❌ Ne pas mentionner l'éducation du travailleur et de l'employeur</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Évaluer correctement le type et contrôle de l'épilepsie (critère ILAE)</td><td class="pts">4/20</td></tr><tr><td>Analyser les caractéristiques du poste (risques spécifiques)</td><td class="pts">4/20</td></tr><tr><td>Appliquer les critères de décision INRS (bien/mal contrôlée)</td><td class="pts">3/20</td></tr><tr><td>Décision d'aptitude motivée et individualisée</td><td class="pts">4/20</td></tr><tr><td>Proposer aménagements / reclassement / suivi renforcé</td><td class="pts">3/20</td></tr><tr><td>Citer les métiers réglementés et rôle du médecin du travail</td><td class="pts">2/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours8.html">← Précédent</a>
+    <a class="nav-btn" href="cours10.html">Suivant →</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

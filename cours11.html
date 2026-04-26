@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 11 — Dermatite de Contact Professionnelle</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+.back-link {
+  color: #58a6ff; text-decoration: none; font-size: 13px;
+}
+.back-link:hover { text-decoration: underline; }
+.topbar-title { font-size: 13px; color: #8b949e; }
+.topbar-badge {
+  font-size: 11px; font-weight: 600; color: #fff;
+  padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* PAGE HEADER */
+.page-header {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #21262d;
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+.station-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: #58a6ff; text-transform: uppercase; margin-bottom: 8px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  color: #f0f6fc;
+  margin-bottom: 10px;
+}
+.page-header p {
+  color: #8b949e; font-size: 14px; max-width: 600px; margin: 0 auto;
+}
+
+/* MAIN */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+/* SECTION */
+.section {
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #161b22;
+}
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(88,166,255,0.04); }
+.section-icon { font-size: 22px; flex-shrink: 0; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+.section-title-text span { font-size: 12px; color: #8b949e; }
+.toggle-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #8b949e; font-size: 18px; line-height: 1;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.toggle-btn:hover { background: #21262d; color: #c9d1d9; }
+
+.section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding: 0 20px;
+}
+.section-body.open {
+  max-height: 3000px;
+  padding: 20px;
+  border-top: 1px solid #21262d;
+}
+
+/* CONTENT */
+.section-body h4 {
+  font-size: 13px; font-weight: 600; color: #58a6ff;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 18px 0 8px;
+}
+.section-body h4:first-child { margin-top: 0; }
+.section-body ul, .section-body ol {
+  padding-left: 20px; line-height: 1.8;
+}
+.section-body li { font-size: 14px; color: #c9d1d9; margin-bottom: 3px; }
+.section-body li > ul { margin-top: 4px; }
+.section-body p { font-size: 14px; line-height: 1.7; color: #c9d1d9; }
+.section-body strong { color: #f0f6fc; }
+
+/* HIGHLIGHT BOXES */
+.highlight-box {
+  border-radius: 8px; padding: 14px 16px;
+  margin: 12px 0; font-size: 14px;
+  border-left: 3px solid;
+}
+.hl-info  { background: rgba(88,166,255,0.08); border-color: #58a6ff; color: #c9d1d9; }
+.hl-warn  { background: rgba(227,179,65,0.08); border-color: #e3b341; color: #c9d1d9; }
+.hl-danger{ background: rgba(248,81,73,0.10); border-color: #f85149; color: #c9d1d9; }
+.hl-success{background: rgba(63,185,80,0.08); border-color: #3fb950; color: #c9d1d9; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; border-radius: 20px;
+  padding: 2px 10px; font-size: 12px; font-weight: 600;
+}
+.chip-green  { background: rgba(63,185,80,0.15);  color: #3fb950; }
+.chip-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.chip-red    { background: rgba(248,81,73,0.15);  color: #f85149; }
+.chip-yellow { background: rgba(227,179,65,0.15); color: #e3b341; }
+
+/* GRILLE TABLE */
+.grille-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.grille-table th {
+  background: #0d1117; color: #8b949e;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid #21262d;
+}
+.grille-table td { padding: 10px 14px; border-bottom: 1px solid #21262d; }
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.grille-table .pts {
+  text-align: right; font-weight: 600; color: #3fb950; white-space: nowrap;
+}
+.grille-table .total-row td { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+.grille-table .total-row .pts { color: #58a6ff; font-size: 15px; }
+
+/* NAV */
+.nav-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid #21262d;
+}
+.nav-btn {
+  padding: 10px 20px; border-radius: 8px;
+  border: 1px solid #30363d;
+  background: #161b22; color: #c9d1d9;
+  text-decoration: none; font-size: 14px;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: #21262d; border-color: #58a6ff; color: #58a6ff; }
+
+@media (max-width: 600px) {
+  .topbar { padding: 10px 14px; }
+  .main { padding: 20px 12px 60px; }
+  .section-body.open { padding: 14px; }
+  .nav-footer { flex-direction: column; gap: 12px; }
+  .nav-btn { width: 100%; text-align: center; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 11 / 13</span>
+  <span class="topbar-badge" style="background:#4a1d96">COURS 11</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 11</div>
+  <h1>🖐️ Dermatite de Contact Professionnelle</h1>
+  <p>Démarche diagnostique allergologique — eczéma de contact vs dermatite irritative.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>Mme Yasmine, 28 ans, coiffeuse depuis 5 ans, consulte pour des lésions érythémato-vésiculeuses prurigineuses 
+des mains et des avant-bras, apparues 6 mois après le début du travail. Les lésions s'améliorent lors des congés et réapparaissent 
+à la reprise. Elle utilise des colorations capillaires à base de PPD (para-phénylène-diamine) quotidiennement.</p>
+<div class="highlight-box hl-info">
+  <strong>Suspect :</strong> Eczéma de contact allergique à la PPD — dermatose professionnelle fréquente chez les coiffeurs. Double diagnostic requis : nature de la lésion + lien avec le travail.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Double anamnèse médicale et professionnelle</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Histoire de la dermatose</h4>
+<ul>
+  <li>Ancienneté des lésions, mode d'installation (brutal ou progressif)</li>
+  <li><strong>Chronologie par rapport au travail :</strong> apparition au travail, amélioration week-ends/congés, rechute à la reprise</li>
+  <li>Topographie initiale (mains, avant-bras, visage)</li>
+  <li>Signes fonctionnels : prurit intense ? brûlures ? (prurit → allergique / brûlures → irritatif)</li>
+  <li>Évolution des lésions (extension, diffusion)</li>
+</ul>
+<h4>Antécédents personnels</h4>
+<ul>
+  <li>Terrain atopique (eczéma, asthme, rhinite allergique)</li>
+  <li>Allergies connues (nickel, latex, cosmétiques)</li>
+  <li>Antécédents de dermatose préexistante</li>
+</ul>
+<h4>Enquête professionnelle</h4>
+<ul>
+  <li>Produits manipulés quotidiennement (PPD, persulfates, permanentes, décolorants)</li>
+  <li>Port de gants (type, fréquence) ? Lavage des mains (fréquence, savon ?)</li>
+  <li>Cas similaires chez les collègues ?</li>
+  <li>Activités extra-professionnelles (jardinage, bricolage, produits ménagers)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Examen Clinique</h2>
+            <span>Description lésionnelle précise</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Description des lésions (diagnostic dermatologique)</h4>
+<ul>
+  <li><strong>Eczéma de contact allergique (ECA) :</strong>
+    <ul>
+      <li>Lésions érythémato-vésiculeuses, suintantes, prurigineuses</li>
+      <li>Limites imprécises, émiettées, au-delà de la zone de contact</li>
+      <li>Éruptions secondes possibles (à distance)</li>
+    </ul>
+  </li>
+  <li><strong>Dermatite irritative (DI) :</strong>
+    <ul>
+      <li>Lésions sèches, érythémato-squameuses</li>
+      <li>Bien délimitées au territoire d'application</li>
+      <li>Brûlures &gt; prurit</li>
+    </ul>
+  </li>
+</ul>
+<h4>Topographie</h4>
+<ul>
+  <li>Dos des mains, espaces interdigitaux, poignets (coiffeurs)</li>
+  <li>La topographie correspond à la zone de contact avec l'antigène</li>
+</ul>
+<div class="highlight-box hl-info">
+  <strong>ECA vs DI :</strong> Prurit intense + limites émiettées + amélioration au repos → ECA. Brûlures + limites nettes + délai qqs heures → DI.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Examens Complémentaires</h2>
+            <span>Tests allergologiques</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Tests à lecture retardée (patch-tests / épidermotests) +++</h4>
+<ul>
+  <li>Explorent l'hypersensibilité retardée à médiation cellulaire (type IV)</li>
+  <li>Application de cupules pendant 48h, lecture à 48h + 72-96h</li>
+  <li>Positif allergique : érythème, œdème, vésicules au site d'application</li>
+  <li><strong>Tests à effectuer après guérison, sans corticoïdes/antihistaminiques</strong></li>
+</ul>
+<h4>Tests à lecture immédiate (prick-tests)</h4>
+<ul>
+  <li>Explorent l'hypersensibilité immédiate (IgE, type I)</li>
+  <li>Indication : urticaire de contact, réactions systémiques aux protéines</li>
+  <li>Positif : papule urticarienne &gt;3mm en 15-20 minutes</li>
+</ul>
+<h4>Tests de provocation</h4>
+<ul>
+  <li>ROAT (application répétée ouverte, 5x5cm, 1-2 semaines)</li>
+  <li>Test d'usage (reproduire la lésion en conditions réelles)</li>
+</ul>
+<h4>Bilan biologique</h4>
+<ul>
+  <li>IgE spécifiques si suspicion d'urticaire de contact (latex, protéines)</li>
+  <li>Pas d'indication pour l'ECA classique</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Diagnostic</h2>
+            <span>Démarche en 7 étapes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Démarche diagnostique structurée (7 étapes)</h4>
+<ol style="padding-left:18px; line-height:2">
+  <li>Éliminer une dermatite non due à un contact (psoriasis, lichen, mycose)</li>
+  <li>Diagnostiquer une dermatite contactopathique (ECA vs DI)</li>
+  <li>Choisir les outils allergologiques adaptés</li>
+  <li>Évaluer l'indication du bilan allergologique</li>
+  <li>Décider de réaliser le bilan</li>
+  <li>Choisir les tests à effectuer (série standard + produits du poste)</li>
+  <li>Établir la pertinence (le test positif est-il pertinent avec l'exposition ?)</li>
+</ol>
+<h4>Diagnostic final pour Mme Yasmine</h4>
+<div class="highlight-box hl-danger">
+  <strong>Eczéma de contact allergique à la PPD (para-phénylène-diamine)</strong> — confirmé par patch-test positif à la PPD. Dermatose professionnelle liée au travail de coiffeuse.
+</div>
+<h4>Agents allergisants fréquents en milieu professionnel</h4>
+<ul>
+  <li><strong>Coiffure :</strong> PPD, persulfates, résorcine</li>
+  <li><strong>BTP :</strong> Chrome (ciment), résines époxy</li>
+  <li><strong>Soins de santé :</strong> Latex, chlorhexidine, désinfectants</li>
+  <li><strong>Métallurgie :</strong> Nickel, cobalt, chrome</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Traitement et prévention professionnelle</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Traitement médical</h4>
+<ul>
+  <li>Phase aiguë : dermocorticoïdes (classe III-IV), antihistaminiques si prurit intense</li>
+  <li>Émollients pour restaurer la barrière cutanée</li>
+  <li>Éviter les contacts avec les allergènes identifiés</li>
+</ul>
+<h4>Décision d'aptitude</h4>
+<ul>
+  <li>Éviction de l'allergène causale (PPD) : indispensable</li>
+  <li>Port de gants adaptés (attention : gants latex peuvent aggraver)</li>
+  <li>Inaptitude si éviction impossible au même poste</li>
+  <li>Reclassement : poste sans contact avec la PPD</li>
+</ul>
+<h4>Prévention</h4>
+<ul>
+  <li>Port systématique de gants lors des colorations</li>
+  <li>Produits sans PPD (alternatives disponibles)</li>
+  <li>Limitation du contact avec l'eau (lavages répétés)</li>
+  <li>Émollients préventifs</li>
+</ul>
+<h4>Réparation (MPI)</h4>
+<ul>
+  <li>Tableaux de MP des dermatoses professionnelles (agents allergisants et/ou irritants)</li>
+  <li>CMI descriptif : siège, nature, lien avec la profession</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Confondre ECA (allergie, prurit, limites émiettées) et DI (irritation, brûlures, limites nettes)</li>
+    <li>❌ Faire les patch-tests pendant la phase aiguë ou sous corticoïdes (faux négatifs)</li>
+    <li>❌ Oublier la pertinence du test : un patch-test positif n'est utile que s'il correspond à une exposition réelle</li>
+    <li>❌ Ne pas vérifier la chronologie (amélioration congés/week-ends = signe cardinal)</li>
+    <li>❌ Proposer des gants latex chez une patiente potentiellement sensible au latex</li>
+    <li>❌ Oublier le double diagnostic : nature de la lésion + lien avec le travail</li>
+    <li>❌ Ne pas mentionner les activités extra-professionnelles (bricolage, jardinage) comme sources possibles</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Double anamnèse médicale + professionnelle (chronologie, produits)</td><td class="pts">4/20</td></tr><tr><td>Description clinique précise (ECA vs DI, topographie)</td><td class="pts">3/20</td></tr><tr><td>Démarche diagnostique en 7 étapes</td><td class="pts">3/20</td></tr><tr><td>Choisir les tests allergologiques adaptés (patch-tests +++)</td><td class="pts">4/20</td></tr><tr><td>Éviction de l'allergène et décision d'aptitude</td><td class="pts">3/20</td></tr><tr><td>Prévention et réparation (tableau de MP)</td><td class="pts">3/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours10.html">← Précédent</a>
+    <a class="nav-btn" href="cours12.html">Suivant →</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

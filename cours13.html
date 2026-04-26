@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 13 — Risques Psychosociaux & Burnout</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+.back-link {
+  color: #58a6ff; text-decoration: none; font-size: 13px;
+}
+.back-link:hover { text-decoration: underline; }
+.topbar-title { font-size: 13px; color: #8b949e; }
+.topbar-badge {
+  font-size: 11px; font-weight: 600; color: #fff;
+  padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* PAGE HEADER */
+.page-header {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #21262d;
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+.station-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: #58a6ff; text-transform: uppercase; margin-bottom: 8px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  color: #f0f6fc;
+  margin-bottom: 10px;
+}
+.page-header p {
+  color: #8b949e; font-size: 14px; max-width: 600px; margin: 0 auto;
+}
+
+/* MAIN */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+/* SECTION */
+.section {
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #161b22;
+}
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(88,166,255,0.04); }
+.section-icon { font-size: 22px; flex-shrink: 0; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+.section-title-text span { font-size: 12px; color: #8b949e; }
+.toggle-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #8b949e; font-size: 18px; line-height: 1;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.toggle-btn:hover { background: #21262d; color: #c9d1d9; }
+
+.section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding: 0 20px;
+}
+.section-body.open {
+  max-height: 3000px;
+  padding: 20px;
+  border-top: 1px solid #21262d;
+}
+
+/* CONTENT */
+.section-body h4 {
+  font-size: 13px; font-weight: 600; color: #58a6ff;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 18px 0 8px;
+}
+.section-body h4:first-child { margin-top: 0; }
+.section-body ul, .section-body ol {
+  padding-left: 20px; line-height: 1.8;
+}
+.section-body li { font-size: 14px; color: #c9d1d9; margin-bottom: 3px; }
+.section-body li > ul { margin-top: 4px; }
+.section-body p { font-size: 14px; line-height: 1.7; color: #c9d1d9; }
+.section-body strong { color: #f0f6fc; }
+
+/* HIGHLIGHT BOXES */
+.highlight-box {
+  border-radius: 8px; padding: 14px 16px;
+  margin: 12px 0; font-size: 14px;
+  border-left: 3px solid;
+}
+.hl-info  { background: rgba(88,166,255,0.08); border-color: #58a6ff; color: #c9d1d9; }
+.hl-warn  { background: rgba(227,179,65,0.08); border-color: #e3b341; color: #c9d1d9; }
+.hl-danger{ background: rgba(248,81,73,0.10); border-color: #f85149; color: #c9d1d9; }
+.hl-success{background: rgba(63,185,80,0.08); border-color: #3fb950; color: #c9d1d9; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; border-radius: 20px;
+  padding: 2px 10px; font-size: 12px; font-weight: 600;
+}
+.chip-green  { background: rgba(63,185,80,0.15);  color: #3fb950; }
+.chip-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.chip-red    { background: rgba(248,81,73,0.15);  color: #f85149; }
+.chip-yellow { background: rgba(227,179,65,0.15); color: #e3b341; }
+
+/* GRILLE TABLE */
+.grille-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.grille-table th {
+  background: #0d1117; color: #8b949e;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid #21262d;
+}
+.grille-table td { padding: 10px 14px; border-bottom: 1px solid #21262d; }
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.grille-table .pts {
+  text-align: right; font-weight: 600; color: #3fb950; white-space: nowrap;
+}
+.grille-table .total-row td { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+.grille-table .total-row .pts { color: #58a6ff; font-size: 15px; }
+
+/* NAV */
+.nav-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid #21262d;
+}
+.nav-btn {
+  padding: 10px 20px; border-radius: 8px;
+  border: 1px solid #30363d;
+  background: #161b22; color: #c9d1d9;
+  text-decoration: none; font-size: 14px;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: #21262d; border-color: #58a6ff; color: #58a6ff; }
+
+@media (max-width: 600px) {
+  .topbar { padding: 10px 14px; }
+  .main { padding: 20px 12px 60px; }
+  .section-body.open { padding: 14px; }
+  .nav-footer { flex-direction: column; gap: 12px; }
+  .nav-btn { width: 100%; text-align: center; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 13 / 13</span>
+  <span class="topbar-badge" style="background:#1e3a5f">COURS 13</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 13</div>
+  <h1>🧘 Risques Psychosociaux & Burnout</h1>
+  <p>RPS, stress au travail, burnout, harcèlement — évaluation et prévention.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>Mme Sirine, 38 ans, infirmière en réanimation depuis 12 ans, consulte pour épuisement intense depuis 6 mois. 
+Elle décrit une fatigue permanente, une perte d'intérêt pour son travail ("je ne supporte plus mes patients"), 
+des troubles du sommeil, des pleurs fréquents et une baisse de ses performances professionnelles.</p>
+<div class="highlight-box hl-info">
+  <strong>Contexte :</strong> Burnout professionnel — Syndrome d'épuisement professionnel. L'examinateur évalue votre capacité à identifier le burnout, le différencier de la dépression, et proposer une prise en charge.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Évaluation multidimensionnelle</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Les 3 dimensions du burnout (OMS)</h4>
+<ul>
+  <li><strong>Épuisement émotionnel :</strong> "Je suis à bout, je n'en peux plus"</li>
+  <li><strong>Dépersonnalisation / cynisme :</strong> "Je ne supporte plus mes patients, je me désintéresse"</li>
+  <li><strong>Perte d'efficacité professionnelle :</strong> "Je fais des erreurs, je ne suis plus compétente"</li>
+</ul>
+<h4>Facteurs de risque organisationnels</h4>
+<ul>
+  <li>Charge de travail excessive (surcharge hospitalière)</li>
+  <li>Manque de reconnaissance et de soutien hiérarchique</li>
+  <li>Autonomie insuffisante</li>
+  <li>Conflits de valeurs (souffrance éthique : contrainte d'agir contre ses valeurs)</li>
+  <li>Travail de nuit, horaires irréguliers</li>
+</ul>
+<h4>Facteurs individuels</h4>
+<ul>
+  <li>Personnalité perfectionniste (type A)</li>
+  <li>Hyperémotivité, faible estime de soi</li>
+  <li>Double charge travail/famille (femmes plus exposées)</li>
+  <li>Absence de soutien social en dehors du travail</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Évaluation Clinique</h2>
+            <span>Manifestations du burnout</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Manifestations émotionnelles</h4>
+<ul>
+  <li>Anxiété, irritabilité, hypersensibilité</li>
+  <li>Tristesse, perte d'intérêt (≠ dépression caractérisée)</li>
+  <li>Sentiment d'échec, dévalorisation professionnelle</li>
+</ul>
+<h4>Manifestations cognitives</h4>
+<ul>
+  <li>Troubles de la concentration et de la mémoire</li>
+  <li>Inattention (risque d'erreur médicale ++)</li>
+</ul>
+<h4>Manifestations comportementales</h4>
+<ul>
+  <li>Absentéisme, retrait social, isolement</li>
+  <li>Comportements addictifs (alcool, médicaments)</li>
+  <li>Agressivité, cynisme envers les patients/collègues</li>
+</ul>
+<h4>Manifestations physiques</h4>
+<ul>
+  <li>Fatigue intense et prolongée, troubles du sommeil</li>
+  <li>Céphalées, douleurs musculaires, TMS</li>
+  <li>Troubles digestifs, cardiovasculaires</li>
+</ul>
+<div class="highlight-box hl-warn">
+  <strong>Risque d'idées suicidaires → à évaluer systématiquement +++</strong>
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Évaluation et Outils</h2>
+            <span>Mesure des RPS</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>Questionnaires standardisés</h4>
+<ul>
+  <li><strong>MBI (Maslach Burnout Inventory) :</strong> Évalue les 3 dimensions du burnout (épuisement, dépersonnalisation, efficacité)</li>
+  <li><strong>Questionnaire de Karasek :</strong> Évalue le "Job strain" = Demande psychologique élevée × Faible latitude décisionnelle × Faible soutien social</li>
+  <li><strong>Modèle de Siegrist :</strong> Analyse le déséquilibre Efforts/Récompenses (salaire, sécurité, reconnaissance, estime de soi)</li>
+</ul>
+<h4>Indicateurs collectifs</h4>
+<ul>
+  <li>Absentéisme, turn-over</li>
+  <li>AT/MP, TMS, plaintes signalées</li>
+  <li>Conflits internes</li>
+</ul>
+<h4>Évaluation psychiatrique si nécessaire</h4>
+<ul>
+  <li>Différencier burnout / dépression / anxiété généralisée</li>
+  <li>Évaluer le risque suicidaire</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Diagnostic Différentiel</h2>
+            <span>Burnout vs autres RPS</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Burnout — Caractéristiques</h4>
+<ul>
+  <li>Lié spécifiquement au travail (contexte professionnel)</li>
+  <li>Amélioration lors des congés (contrairement à la dépression)</li>
+  <li>3 dimensions : épuisement + dépersonnalisation + perte d'efficacité</li>
+</ul>
+<h4>Dépression — À différencier</h4>
+<ul>
+  <li>Persistance des symptômes même en dehors du travail</li>
+  <li>Anhédonie généralisée (perte de plaisir dans tous les domaines)</li>
+  <li>Nécessite un traitement antidépresseur</li>
+</ul>
+<h4>Stress au travail</h4>
+<ul>
+  <li>Réaction à des exigences excessives : physique et émotionnelle</li>
+  <li>Manifestations : nervosité, troubles du sommeil, absentéisme</li>
+  <li>Modèle Karasek : demande élevée + faible contrôle = "job strain"</li>
+</ul>
+<h4>Harcèlement moral</h4>
+<ul>
+  <li>Violence interne : agissements répétés visant à dégrader les conditions de travail</li>
+  <li>Peut provoquer burnout ou dépression</li>
+</ul>
+<h4>Souffrance éthique</h4>
+<ul>
+  <li>Contrainte d'agir à l'encontre de ses valeurs</li>
+  <li>Fréquente chez les soignants (rationnement des soins)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Prise en charge globale</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>Au niveau individuel (le travailleur)</h4>
+<ul>
+  <li>Arrêt de travail si nécessaire (épuisement sévère, risque d'erreur)</li>
+  <li>Consultation psychiatrique / psychologue du travail</li>
+  <li>Psychothérapie (TCC, pleine conscience)</li>
+  <li>Gestion du stress : exercice physique, sommeil, techniques de relaxation</li>
+</ul>
+<h4>Au niveau de l'entreprise (employeur)</h4>
+<ul>
+  <li>Amélioration des conditions de travail (charge, reconnaissance, autonomie)</li>
+  <li>Répartition équitable des tâches</li>
+  <li>Soutien psychologique : dispositifs d'écoute</li>
+  <li>Culture d'entreprise bienveillante</li>
+</ul>
+<h4>Rôle du médecin du travail</h4>
+<ul>
+  <li>Identifier les situations à risque (questionnaires collectifs)</li>
+  <li>Accompagner le travailleur et orienter vers les ressources adaptées</li>
+  <li>Alerter l'employeur sur les conditions de travail délétères</li>
+  <li>Proposer des aménagements de poste (horaires, tâches)</li>
+</ul>
+<h4>Secteurs particulièrement exposés</h4>
+<ul>
+  <li>Santé (médecins, infirmiers) — souffrance éthique ++</li>
+  <li>Enseignement, forces de sécurité, aide à la personne, centres d'appel</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Confondre burnout (lié au travail, amélioré par les congés) et dépression (persistante hors travail)</li>
+    <li>❌ Oublier d'évaluer le risque suicidaire +++</li>
+    <li>❌ Ne pas citer les 3 dimensions du burnout (épuisement + dépersonnalisation + inefficacité)</li>
+    <li>❌ Ignorer les facteurs organisationnels (surcharge, manque de reconnaissance) au profit des seuls facteurs individuels</li>
+    <li>❌ Ne pas mentionner le rôle du médecin du travail (alerte employeur, aménagement de poste)</li>
+    <li>❌ Oublier les questionnaires validés (Karasek, Siegrist, MBI) comme outils d'évaluation</li>
+    <li>❌ Proposer uniquement un arrêt de travail sans traitement de fond des causes organisationnelles</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Identifier les 3 dimensions du burnout (épuisement, dépersonnalisation, efficacité)</td><td class="pts">4/20</td></tr><tr><td>Analyser les facteurs de risque organisationnels et individuels</td><td class="pts">3/20</td></tr><tr><td>Distinguer burnout / dépression / harcèlement / stress</td><td class="pts">3/20</td></tr><tr><td>Citer les outils d'évaluation (Karasek, Siegrist, MBI)</td><td class="pts">3/20</td></tr><tr><td>Évaluer le risque suicidaire + CAT individuelle (arrêt, psy)</td><td class="pts">4/20</td></tr><tr><td>Proposer une stratégie de prévention collective (rôle médecin du travail)</td><td class="pts">3/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours12.html">← Précédent</a>
+    <a class="nav-btn" href="index.html">🏠 Accueil</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>

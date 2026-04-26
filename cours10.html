@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 10 — Pneumopathies aux Irritants Respiratoires</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+.back-link {
+  color: #58a6ff; text-decoration: none; font-size: 13px;
+}
+.back-link:hover { text-decoration: underline; }
+.topbar-title { font-size: 13px; color: #8b949e; }
+.topbar-badge {
+  font-size: 11px; font-weight: 600; color: #fff;
+  padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* PAGE HEADER */
+.page-header {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #21262d;
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+.station-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  color: #58a6ff; text-transform: uppercase; margin-bottom: 8px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  color: #f0f6fc;
+  margin-bottom: 10px;
+}
+.page-header p {
+  color: #8b949e; font-size: 14px; max-width: 600px; margin: 0 auto;
+}
+
+/* MAIN */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+/* SECTION */
+.section {
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #161b22;
+}
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.2s;
+}
+.section-header:hover { background: rgba(88,166,255,0.04); }
+.section-icon { font-size: 22px; flex-shrink: 0; }
+.section-title-text { flex: 1; }
+.section-title-text h2 { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+.section-title-text span { font-size: 12px; color: #8b949e; }
+.toggle-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #8b949e; font-size: 18px; line-height: 1;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.toggle-btn:hover { background: #21262d; color: #c9d1d9; }
+
+.section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding: 0 20px;
+}
+.section-body.open {
+  max-height: 3000px;
+  padding: 20px;
+  border-top: 1px solid #21262d;
+}
+
+/* CONTENT */
+.section-body h4 {
+  font-size: 13px; font-weight: 600; color: #58a6ff;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 18px 0 8px;
+}
+.section-body h4:first-child { margin-top: 0; }
+.section-body ul, .section-body ol {
+  padding-left: 20px; line-height: 1.8;
+}
+.section-body li { font-size: 14px; color: #c9d1d9; margin-bottom: 3px; }
+.section-body li > ul { margin-top: 4px; }
+.section-body p { font-size: 14px; line-height: 1.7; color: #c9d1d9; }
+.section-body strong { color: #f0f6fc; }
+
+/* HIGHLIGHT BOXES */
+.highlight-box {
+  border-radius: 8px; padding: 14px 16px;
+  margin: 12px 0; font-size: 14px;
+  border-left: 3px solid;
+}
+.hl-info  { background: rgba(88,166,255,0.08); border-color: #58a6ff; color: #c9d1d9; }
+.hl-warn  { background: rgba(227,179,65,0.08); border-color: #e3b341; color: #c9d1d9; }
+.hl-danger{ background: rgba(248,81,73,0.10); border-color: #f85149; color: #c9d1d9; }
+.hl-success{background: rgba(63,185,80,0.08); border-color: #3fb950; color: #c9d1d9; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; border-radius: 20px;
+  padding: 2px 10px; font-size: 12px; font-weight: 600;
+}
+.chip-green  { background: rgba(63,185,80,0.15);  color: #3fb950; }
+.chip-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.chip-red    { background: rgba(248,81,73,0.15);  color: #f85149; }
+.chip-yellow { background: rgba(227,179,65,0.15); color: #e3b341; }
+
+/* GRILLE TABLE */
+.grille-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.grille-table th {
+  background: #0d1117; color: #8b949e;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid #21262d;
+}
+.grille-table td { padding: 10px 14px; border-bottom: 1px solid #21262d; }
+.grille-table tr:last-child td { border-bottom: none; }
+.grille-table tr:hover td { background: rgba(255,255,255,0.02); }
+.grille-table .pts {
+  text-align: right; font-weight: 600; color: #3fb950; white-space: nowrap;
+}
+.grille-table .total-row td { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+.grille-table .total-row .pts { color: #58a6ff; font-size: 15px; }
+
+/* NAV */
+.nav-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid #21262d;
+}
+.nav-btn {
+  padding: 10px 20px; border-radius: 8px;
+  border: 1px solid #30363d;
+  background: #161b22; color: #c9d1d9;
+  text-decoration: none; font-size: 14px;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: #21262d; border-color: #58a6ff; color: #58a6ff; }
+
+@media (max-width: 600px) {
+  .topbar { padding: 10px 14px; }
+  .main { padding: 20px 12px 60px; }
+  .section-body.open { padding: 14px; }
+  .nav-footer { flex-direction: column; gap: 12px; }
+  .nav-btn { width: 100%; text-align: center; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Toutes les stations</a>
+  <span class="topbar-title">Station 10 / 13</span>
+  <span class="topbar-badge" style="background:#7c1d1d">COURS 10</span>
+</div>
+
+<div class="page-header">
+  <div class="station-label">Station ECOS 10</div>
+  <h1>☁️ Pneumopathies aux Irritants Respiratoires</h1>
+  <p>Gaz irritants, OAP lésionnel, RADS, BPCO professionnelle — CAT urgente.</p>
+</div>
+
+<div class="main">
+  <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+    <button onclick="openAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📖 Tout ouvrir</button>
+    <button onclick="closeAll()" style="padding:8px 16px; border-radius:6px; border:1px solid #21262d; background:#1c2128; color:#8b949e; cursor:pointer; font-size:12px;">📕 Tout fermer</button>
+  </div>
+
+  
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cas')" style="background: linear-gradient(90deg, #58a6ff10, transparent);">
+          <span class="section-icon">🧑‍⚕️</span>
+          <div class="section-title-text">
+            <h2>Situation Clinique</h2>
+            <span>Cas ECOS — 5 à 7 minutes</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#58a6ff">−</button>
+        </div>
+        <div class="section-body open" id="cas">
+          
+<p>Une ouvrière de nettoyage, 32 ans, consulte en urgence après avoir mélangé par erreur de l'eau de Javel et de l'acide chlorhydrique 
+pour nettoyer des sanitaires. Elle présente une toux quinteuse, brûlure thoracique, dyspnée et larmoiement. SpO₂ = 92%.</p>
+<div class="highlight-box hl-danger">
+  <strong>⚠️ URGENCE :</strong> Inhalation de chlore gazeux (Cl₂) — Cl₂ = gaz peu soluble → atteinte bronchiolo-alvéolaire retardée possible (OAP lésionnel) jusqu'à 24h après l'exposition.
+</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('interro')" style="background: linear-gradient(90deg, #3fb95010, transparent);">
+          <span class="section-icon">❓</span>
+          <div class="section-title-text">
+            <h2>Interrogatoire Ciblé</h2>
+            <span>Urgence — Questions immédiates</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#3fb950">+</button>
+        </div>
+        <div class="section-body " id="interro">
+          
+<h4>Circonstances de l'exposition</h4>
+<ul>
+  <li>Nature exacte des produits mélangés et réaction chimique impliquée</li>
+  <li>Durée et intensité de l'exposition (espace confiné ou aéré ?)</li>
+  <li>Délai depuis l'exposition (OAP retardé possible jusqu'à 24h pour gaz peu solubles)</li>
+  <li>Port d'EPI (masque respiratoire) ?</li>
+  <li>Autres personnes exposées ?</li>
+</ul>
+<h4>Antécédents respiratoires</h4>
+<ul>
+  <li>Asthme, BPCO, tabagisme ? (facteurs aggravants)</li>
+  <li>Expositions professionnelles antérieures</li>
+</ul>
+<h4>Symptômes actuels</h4>
+<ul>
+  <li>Toux (sèche/productive), dyspnée, brûlure, douleur thoracique</li>
+  <li>Symptômes ORL (larmoiement, rhinorrhée, brûlures oculaires)</li>
+  <li>Signes systémiques (vertiges, nausées, céphalées)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('exam')" style="background: linear-gradient(90deg, #d2a8ff10, transparent);">
+          <span class="section-icon">🔍</span>
+          <div class="section-title-text">
+            <h2>Examen Clinique</h2>
+            <span>Selon la solubilité du gaz</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#d2a8ff">+</button>
+        </div>
+        <div class="section-body " id="exam">
+          
+<h4>Examen respiratoire urgent</h4>
+<ul>
+  <li>FR, SpO₂, auscultation (râles bronchiques, crépitants)</li>
+  <li>Signes de détresse respiratoire aiguë (tirage, balancement thoraco-abdominal)</li>
+  <li>Signes d'œdème laryngé (dysphonie, stridor)</li>
+</ul>
+<h4>Examen ORL et cutané</h4>
+<ul>
+  <li>Brûlures oculaires, rhinite aiguë</li>
+  <li>Lésions cutanées si contact avec acides/bases</li>
+</ul>
+<h4>Classification par solubilité du gaz (physiopathologie)</h4>
+<ul>
+  <li><strong>Très solubles (NH₃, SO₂, HCl) :</strong> VAS → œdème laryngé, rhinite, irritation immédiate → symptômes dès l'exposition</li>
+  <li><strong>Moyennement solubles (NO₂, formaldéhyde) :</strong> Bronches → bronchospasme, trachéobronchite</li>
+  <li><strong>Peu solubles (Cl₂, ozone) :</strong> Alvéoles → OAP lésionnel retardé (6-24h) — <span class="chip chip-red">Danger +++ même si asymptomatique initialement</span></li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('para')" style="background: linear-gradient(90deg, #ffa65710, transparent);">
+          <span class="section-icon">🧪</span>
+          <div class="section-title-text">
+            <h2>Examens Complémentaires</h2>
+            <span>Bilan immédiat</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#ffa657">+</button>
+        </div>
+        <div class="section-body " id="para">
+          
+<h4>En urgence</h4>
+<ul>
+  <li><strong>Gazométrie artérielle :</strong> PaO₂, PaCO₂, pH (hypoxémie, acidose ?)</li>
+  <li><strong>SpO₂ continue</strong></li>
+  <li><strong>Radiographie thoracique :</strong> normale initialement (Cl₂), puis opacités bilatérales si OAP</li>
+  <li>NFS, ionogramme, CRP</li>
+</ul>
+<h4>À distance</h4>
+<ul>
+  <li><strong>EFR (spirométrie) :</strong> évaluer séquelles (syndrome obstructif ? RADS ?)</li>
+  <li>Test de méthacholine si hyperréactivité bronchique persistante</li>
+  <li>TDM thoracique si évolution défavorable (bronchiolite oblitérante ?)</li>
+</ul>
+<h4>Formes anatomocliniques à connaître</h4>
+<ul>
+  <li>OAP lésionnel (Cl₂, phosgène)</li>
+  <li>RADS / Syndrome de Brooks (exposition massive unique → hyperréactivité durable)</li>
+  <li>Trachéobronchite aiguë (NO₂, silo disease)</li>
+  <li>BPCO professionnelle (soudeurs, fumées métalliques)</li>
+  <li>Bronchiolite oblitérante (séquelle d'OAP)</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('diag')" style="background: linear-gradient(90deg, #f7816610, transparent);">
+          <span class="section-icon">🧠</span>
+          <div class="section-title-text">
+            <h2>Diagnostic</h2>
+            <span>OAP lésionnel au chlore</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#f78166">+</button>
+        </div>
+        <div class="section-body " id="diag">
+          
+<h4>Diagnostic principal</h4>
+<div class="highlight-box hl-danger">
+  <strong>OAP lésionnel par inhalation de chlore</strong> — Réaction chimique : NaOCl + 2HCl → Cl₂ + NaCl + H₂O
+</div>
+<h4>Mécanisme physiopathologique</h4>
+<ul>
+  <li>Cl₂ peu soluble → pénètre jusqu'aux alvéoles</li>
+  <li>Destruction de la barrière alvéolo-capillaire</li>
+  <li>Augmentation de la perméabilité capillaire → œdème alvéolaire</li>
+  <li>Hypoxémie sévère retardée (6-24h)</li>
+</ul>
+<h4>Diagnostics différentiels</h4>
+<ul>
+  <li>RADS (Brooks) : si symptômes persistants &gt;3 mois après exposition unique</li>
+  <li>Bronchiolite oblitérante : séquelle possible</li>
+  <li>Asthme aggravé par irritants</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('cat')" style="background: linear-gradient(90deg, #79c0ff10, transparent);">
+          <span class="section-icon">🚑</span>
+          <div class="section-title-text">
+            <h2>Conduite à Tenir</h2>
+            <span>Urgence + prévention</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#79c0ff">+</button>
+        </div>
+        <div class="section-body " id="cat">
+          
+<h4>CAT immédiate sur les lieux</h4>
+<ul>
+  <li>Évacuer la victime de la zone contaminée (EPI pour les sauveteurs !)</li>
+  <li>Appeler les secours médicalisés (15/SAMU)</li>
+  <li>Décontamination cutanée et oculaire si nécessaire</li>
+</ul>
+<h4>CAT médicale</h4>
+<ul>
+  <li>Oxygénothérapie (objectif SpO₂ &gt;95%)</li>
+  <li>Bronchodilatateurs si bronchospasme</li>
+  <li>Corticoïdes selon gravité (avis spécialisé)</li>
+  <li><strong>Hospitalisation pour surveillance au moins 24h</strong> (OAP retardé)</li>
+  <li>Ventilation assistée si insuffisance respiratoire sévère</li>
+</ul>
+<h4>Déclaration en AT</h4>
+<ul>
+  <li>Accident d'intoxication aiguë aux irritants = AT (lois 94-28 / 95-56)</li>
+  <li>RADS peut aussi être déclaré en AT</li>
+  <li>Tableaux de MP : tableau n°3 (arsénié), n°43 (gaz irritants)</li>
+</ul>
+<h4>Prévention</h4>
+<ul>
+  <li>Ne jamais mélanger eau de Javel + acide</li>
+  <li>Étiquetage des produits (règles de stockage)</li>
+  <li>Ventilation des locaux, EPI (masque filtrant)</li>
+  <li>Formation du personnel</li>
+</ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header" onclick="toggleSection('pieges')" style="background: linear-gradient(90deg, #e3b34110, transparent);">
+          <span class="section-icon">⚠️</span>
+          <div class="section-title-text">
+            <h2>Pièges ECOS</h2>
+            <span>Erreurs à éviter</span>
+          </div>
+          <button class="toggle-btn" style="border-color:#e3b341">+</button>
+        </div>
+        <div class="section-body " id="pieges">
+          
+<div class="highlight-box hl-warn">
+  <ul>
+    <li>❌ Rassurer et laisser rentrer un patient exposé au Cl₂ "asymptomatique" — OAP retardé jusqu'à 24h → hospitalisation obligatoire</li>
+    <li>❌ Ne pas demander la gazométrie artérielle (SpO₂ seule insuffisante)</li>
+    <li>❌ Confondre RADS et asthme professionnel classique (RADS = exposition unique massive, sans période de latence)</li>
+    <li>❌ Ne pas identifier la réaction chimique Javel + acide = Cl₂</li>
+    <li>❌ Oublier de déclarer l'accident en AT dans les 48h</li>
+    <li>❌ Ne pas mentionner la protection des sauveteurs lors de l'évacuation</li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+  <!-- Grille d'évaluation -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection('grille')" style="background: linear-gradient(90deg, #56d36410, transparent);">
+      <span class="section-icon">📊</span>
+      <div class="section-title-text">
+        <h2>Grille d'évaluation ECOS</h2>
+        <span>Barème type examinateur — /20 points</span>
+      </div>
+      <button class="toggle-btn" style="border-color:#56d364">+</button>
+    </div>
+    <div class="section-body" id="grille">
+      <table class="grille-table">
+        <thead><tr><th>Item évalué</th><th>Points</th></tr></thead>
+        <tbody><tr><td>Identifier le gaz irritant et sa solubilité (zone d'action)</td><td class="pts">3/20</td></tr><tr><td>Reconnaître l'urgence et évaluer la gravité (SpO₂, gazométrie)</td><td class="pts">3/20</td></tr><tr><td>CAT immédiate correcte (évacuation, O₂, hospitalisation 24h)</td><td class="pts">4/20</td></tr><tr><td>Connaître les 4 formes anatomocliniques (OAP, RADS, trachéobronchite, BPCO)</td><td class="pts">4/20</td></tr><tr><td>Prévention technique (étiquetage, stockage, EPI, ventilation)</td><td class="pts">3/20</td></tr><tr><td>Déclaration en AT et tableaux de MP</td><td class="pts">3/20</td></tr><tr class="total-row"><td><strong>TOTAL</strong></td><td class="pts">20/20</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <a class="nav-btn" href="cours9.html">← Précédent</a>
+    <a class="nav-btn" href="cours11.html">Suivant →</a>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const header = body.previousElementSibling;
+  const btn = header ? header.querySelector('.toggle-btn') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (btn) btn.textContent = isOpen ? '+' : '−';
+}
+function openAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.add('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '−';
+  });
+}
+function closeAll() {
+  document.querySelectorAll('.section-body').forEach(b => {
+    b.classList.remove('open');
+    const h = b.previousElementSibling;
+    const btn = h ? h.querySelector('.toggle-btn') : null;
+    if (btn) btn.textContent = '+';
+  });
+}
+</script>
+</body>
+</html>
